@@ -4,17 +4,19 @@
 $this->pageTitle=Yii::app()->name;
 ?>
 
-<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
+<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1><br />
+<h3>Project Management Software Perfected Through 10 Years of Real-World Use</h3>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
+<p>For 10 years, companies like Subway and Wells Fargo have relied on WorkZone web-based 
+project management software to manage their projects. With WorkZone, you’ll dramatically 
+reduce effort spent managing each project, and team members will always know what tasks 
+they should be working on. More robust than simpler project management tools, like Basecamp, 
+and less complicated than high-end tools, like Microsoft Project, WorkZone is the “just right” 
+solution for most teams.</p>
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
+<?php if(!Yii::app()->user->isGuest):?>
+<p>
+    You last logged in on <?php echo Yii::app()->user->lastLogin; ?>
+</p>
+<?php endif; ?>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>

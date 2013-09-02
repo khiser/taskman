@@ -23,7 +23,7 @@ class ProjectController extends Controller
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
-	 */
+	 
 	public function accessRules()
 	{
 		return array(
@@ -44,15 +44,26 @@ class ProjectController extends Controller
 			),
 		);
 	}
-
+*/
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
 	{
+            $issueDataProvider = new CActiveDataProvider('Issue', array(
+                'criteria'=>array(
+                    'condition'=>'project_id=:projectId',
+                    'params' => array(':projectId'=>$this->loadModel($id)->id),
+                ),
+                'pagination' => array(
+                    'pagesize'=>1,
+                ),
+            ));
+            
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
+                    'issueDataProvider'=>$issueDataProvider,
 		));
 	}
 
@@ -70,7 +81,8 @@ class ProjectController extends Controller
 		if(isset($_POST['Project']))
 		{
 			$model->attributes=$_POST['Project'];
-			if($model->save())
+			$model->attributes=Yii::app()->user->id;
+                        if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
@@ -170,4 +182,39 @@ class ProjectController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
+        /* Provides a form so project admins can associate other users to the project
+         */
+        public function actionAdduser($id)
+        {
+            $project = $this->loadModel($id);
+            if (!Yii::app()->user->checkAccess('createUser', array('project'=>$project)))
+            {
+                throw new CHttpException(403,'You are not authorized to perform this action.');
+            }
+            
+            $form=new ProjectUserForm;
+            //collect user input data
+            if(isset($_POST['ProjectUserForm']))
+            {
+                $form->attributes=$_POST['ProjectUserForm'];
+                $form->project = $project;
+                //validate user input
+                if($form->validate())
+                {
+                    if($form->assign())
+                    {
+                        Yii::app()->user->setFlash('success', $form->username . " has been added to the project.");
+                        //reset the form for another user to be associated if desired
+                        $form->unsetAttributes();
+                        $form->clearErrors();
+                    }
+                }
+            }
+            
+            $form->project = $project;
+            $this->render('adduser', array('model'=>$form));
+        }
+        
+        
 }

@@ -38,7 +38,8 @@ class IssueController extends Controller
 		return array(
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
-                        'projectContext + create' // check to ensure valid project context
+                        'projectContext + create index admin' // check to ensure valid project context
+                        
 		);
 	}
 
@@ -46,7 +47,7 @@ class IssueController extends Controller
 	 * Specifies the access control rules.
 	 * This method is used by the 'accessControl' filter.
 	 * @return array access control rules
-	 */
+	
 	public function accessRules()
 	{
 		return array(
@@ -67,7 +68,7 @@ class IssueController extends Controller
 			),
 		);
 	}
-
+ */
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -86,6 +87,7 @@ class IssueController extends Controller
 	public function actionCreate()
 	{
 		$model=new Issue;
+                $model->project_id = $this->_project->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -145,7 +147,13 @@ class IssueController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Issue');
+		$dataProvider=new CActiveDataProvider('Issue', array(
+                    'criteria'=>array(
+                        'condition'=>'project_id=:projectId',
+                        'params'=>array(
+                            ':projectId'=>$this->_project->id),
+                        ),
+                ));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -157,9 +165,11 @@ class IssueController extends Controller
 	public function actionAdmin()
 	{
 		$model=new Issue('search');
-		$model->unsetAttributes();  // clear any default values
+		// $model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Issue']))
 			$model->attributes=$_GET['Issue'];
+                
+                $model->project_id = $this->_project->id;
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -198,7 +208,7 @@ class IssueController extends Controller
         {
             //set the project identifier based on GET input request variables
             if (isset($_GET['pid'])) {
-                $this-loadProject($_GET['pid']);
+                $this->loadProject($_GET['pid']);
             } else {
                 throw new CHttpException(403,'Must specify a project before performing this action.');
             }

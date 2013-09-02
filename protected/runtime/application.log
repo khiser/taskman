@@ -1176,3 +1176,170 @@ Stack trace:
 #12 {main}
 REQUEST_URI=/taskman/index.php?r=issue/create/id/1
 ---
+2013/09/01 12:06:37 [error] [exception.CDbException] exception 'CDbException' with message 'CDbConnection failed to open the DB connection: SQLSTATE[HY000] [2002] Connection refused' in /Applications/XAMPP/framework/db/CDbConnection.php:382
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbConnection.php(330): CDbConnection->open()
+#1 /Applications/XAMPP/framework/db/CDbConnection.php(308): CDbConnection->setActive(true)
+#2 /Applications/XAMPP/framework/base/CModule.php(387): CDbConnection->init()
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(442): CModule->getComponent('db')
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(451): MigrateCommand->getDbConnection()
+#5 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(482): MigrateCommand->getMigrationHistory(-1)
+#6 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(84): MigrateCommand->getNewMigrations()
+#7 [internal function]: MigrateCommand->actionUp(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#9 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#10 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#11 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#12 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#13 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#14 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#15 {main}
+---
+2013/09/01 22:10:21 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'trackstar.tbl_auth_item_
+            child' doesn't exist. The SQL statement executed was: ALTER TABLE `tbl_auth_item_
+            child` ADD CONSTRAINT `fk_auth_item_child_parent` FOREIGN KEY (`parent`) REFERENCES `tbl_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE.
+2013/09/01 22:10:21 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'trackstar.tbl_auth_item_
+            child' doesn't exist. The SQL statement executed was: ALTER TABLE `tbl_auth_item_
+            child` ADD CONSTRAINT `fk_auth_item_child_parent` FOREIGN KEY (`parent`) REFERENCES `tbl_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1435): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(348): CDbCommand->addForeignKey('fk_auth_item_ch...', 'tbl_auth_item_?...', 'parent', 'tbl_auth_item', 'name', 'CASCADE', 'CASCADE')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_020142_create_rbac_tables.php(26): CDbMigration->addForeignKey('fk_auth_item_ch...', 'tbl_auth_item_?...', 'parent', 'tbl_auth_item', 'name', 'CASCADE', 'CASCADE')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(385): m130902_020142_create_rbac_tables->up()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(109): MigrateCommand->migrateUp('m130902_020142_...')
+#5 [internal function]: MigrateCommand->actionUp(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:11:41 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'tbl_auth_item' already exists. The SQL statement executed was: CREATE TABLE `tbl_auth_item` (
+	`name` varchar(64) NOT NULL,
+	`type` int(11) NOT NULL,
+	`description` text,
+	`bizrule` text,
+	`data` text,
+	PRIMARY KEY (`name`)
+) ENGINE=InnoDB.
+2013/09/01 22:11:41 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'tbl_auth_item' already exists. The SQL statement executed was: CREATE TABLE `tbl_auth_item` (
+	`name` varchar(64) NOT NULL,
+	`type` int(11) NOT NULL,
+	`description` text,
+	`bizrule` text,
+	`data` text,
+	PRIMARY KEY (`name`)
+) ENGINE=InnoDB' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1324): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(233): CDbCommand->createTable('tbl_auth_item', Array, 'ENGINE=InnoDB')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_020142_create_rbac_tables.php(15): CDbMigration->createTable('tbl_auth_item', Array, 'ENGINE=InnoDB')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(385): m130902_020142_create_rbac_tables->up()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(109): MigrateCommand->migrateUp('m130902_020142_...')
+#5 [internal function]: MigrateCommand->actionUp(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:33:59 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'trackstar.tbl_project_user_
+        assignment' doesn't exist. The SQL statement executed was: ALTER TABLE `tbl_project_user_
+        assignment` ADD CONSTRAINT `fk_project_user_role` FOREIGN KEY (`role`) REFERENCES `tbl_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE.
+2013/09/01 22:33:59 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'trackstar.tbl_project_user_
+        assignment' doesn't exist. The SQL statement executed was: ALTER TABLE `tbl_project_user_
+        assignment` ADD CONSTRAINT `fk_project_user_role` FOREIGN KEY (`role`) REFERENCES `tbl_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1435): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(348): CDbCommand->addForeignKey('fk_project_user...', 'tbl_project_use...', 'role', 'tbl_auth_item', 'name', 'CASCADE', 'CASCADE')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_023148_add_roll_to_tbl_project_user_assignment.php(13): CDbMigration->addForeignKey('fk_project_user...', 'tbl_project_use...', 'role', 'tbl_auth_item', 'name', 'CASCADE', 'CASCADE')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(385): m130902_023148_add_roll_to_tbl_project_user_assignment->up()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(109): MigrateCommand->migrateUp('m130902_023148_...')
+#5 [internal function]: MigrateCommand->actionUp(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:34:35 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'role'. The SQL statement executed was: ALTER TABLE `tbl_project_user_assignment` ADD `role` varchar(64).
+2013/09/01 22:34:35 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'role'. The SQL statement executed was: ALTER TABLE `tbl_project_user_assignment` ADD `role` varchar(64)' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1377): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(286): CDbCommand->addColumn('tbl_project_use...', 'role', 'varchar(64)')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_023148_add_roll_to_tbl_project_user_assignment.php(8): CDbMigration->addColumn('tbl_project_use...', 'role', 'varchar(64)')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(385): m130902_023148_add_roll_to_tbl_project_user_assignment->up()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(109): MigrateCommand->migrateUp('m130902_023148_...')
+#5 [internal function]: MigrateCommand->actionUp(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:35:04 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a foreign key constraint (`trackstar`.`tbl_auth_item_child`, CONSTRAINT `fk_auth_item_child_child` FOREIGN KEY (`child`) REFERENCES `trackstar`.`tbl_auth_item` (`name`)). The SQL statement executed was: TRUNCATE TABLE `tbl_auth_item`.
+2013/09/01 22:35:04 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a foreign key constraint (`trackstar`.`tbl_auth_item_child`, CONSTRAINT `fk_auth_item_child_child` FOREIGN KEY (`child`) REFERENCES `trackstar`.`tbl_auth_item` (`name`)). The SQL statement executed was: TRUNCATE TABLE `tbl_auth_item`' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1359): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(270): CDbCommand->truncateTable('tbl_auth_item')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_020142_create_rbac_tables.php(71): CDbMigration->truncateTable('tbl_auth_item')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(410): m130902_020142_create_rbac_tables->down()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(145): MigrateCommand->migrateDown('m130902_020142_...')
+#5 [internal function]: MigrateCommand->actionDown(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:35:10 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'role'. The SQL statement executed was: ALTER TABLE `tbl_project_user_assignment` ADD `role` varchar(64).
+2013/09/01 22:35:10 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'role'. The SQL statement executed was: ALTER TABLE `tbl_project_user_assignment` ADD `role` varchar(64)' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1377): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(286): CDbCommand->addColumn('tbl_project_use...', 'role', 'varchar(64)')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_023148_add_roll_to_tbl_project_user_assignment.php(8): CDbMigration->addColumn('tbl_project_use...', 'role', 'varchar(64)')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(385): m130902_023148_add_roll_to_tbl_project_user_assignment->up()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(109): MigrateCommand->migrateUp('m130902_023148_...')
+#5 [internal function]: MigrateCommand->actionUp(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---
+2013/09/01 22:35:28 [error] [system.db.CDbCommand] CDbCommand::execute() failed: SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a foreign key constraint (`trackstar`.`tbl_auth_item_child`, CONSTRAINT `fk_auth_item_child_child` FOREIGN KEY (`child`) REFERENCES `trackstar`.`tbl_auth_item` (`name`)). The SQL statement executed was: TRUNCATE TABLE `tbl_auth_item`.
+2013/09/01 22:35:28 [error] [exception.CDbException] exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[42000]: Syntax error or access violation: 1701 Cannot truncate a table referenced in a foreign key constraint (`trackstar`.`tbl_auth_item_child`, CONSTRAINT `fk_auth_item_child_child` FOREIGN KEY (`child`) REFERENCES `trackstar`.`tbl_auth_item` (`name`)). The SQL statement executed was: TRUNCATE TABLE `tbl_auth_item`' in /Applications/XAMPP/framework/db/CDbCommand.php:358
+Stack trace:
+#0 /Applications/XAMPP/framework/db/CDbCommand.php(1359): CDbCommand->execute()
+#1 /Applications/XAMPP/framework/db/CDbMigration.php(270): CDbCommand->truncateTable('tbl_auth_item')
+#2 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/migrations/m130902_020142_create_rbac_tables.php(71): CDbMigration->truncateTable('tbl_auth_item')
+#3 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(410): m130902_020142_create_rbac_tables->down()
+#4 /Applications/XAMPP/framework/cli/commands/MigrateCommand.php(145): MigrateCommand->migrateDown('m130902_020142_...')
+#5 [internal function]: MigrateCommand->actionDown(Array)
+#6 /Applications/XAMPP/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(MigrateCommand), Array)
+#7 /Applications/XAMPP/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#8 /Applications/XAMPP/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#9 /Applications/XAMPP/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#10 /Applications/XAMPP/framework/yiic.php(33): CApplication->run()
+#11 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic.php(7): require_once('/Applications/X...')
+#12 /Applications/XAMPP/xamppfiles/htdocs/taskman/protected/yiic(4): require_once('/Applications/X...')
+#13 {main}
+---

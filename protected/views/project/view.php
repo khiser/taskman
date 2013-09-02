@@ -13,14 +13,21 @@ $this->menu=array(
 	array('label'=>'Update Project', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Delete Project', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Project', 'url'=>array('admin')),
+        array('label'=>'Create Issue', 'url'=>array('issue/create','pid'=>$model->id)),
 );
+if (Yii::app()->user->checkAccess('createUser', array('project'=>$model)))
+{
+    $this->menu[] = array('label'=>'Add User to Project', 'url'=>array('adduser', 'id'=>$model->id));
+}
 ?>
 
 <h1>View Project #<?php echo $model->id; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
+    'htmlOptions' => array('class' => 'table table-striped'),
 	'data'=>$model,
-	'attributes'=>array(
+	'attributes'=>array( 
+            
 		'id',
 		'name',
 		'description',
@@ -29,4 +36,12 @@ $this->menu=array(
 		'update_time',
 		'update_user_id',
 	),
+)); ?>
+
+<br />
+<h1>Project Issues:</h1>
+
+<?php $this->widget('zii.widgets.CListView', array(
+    'dataProvider' => $issueDataProvider, 
+    'itemView' => '/issue/_view',
 )); ?>

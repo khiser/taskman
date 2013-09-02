@@ -22,7 +22,7 @@
  * @property User $owner
  * @property Project $project
  */
-class Issue extends CActiveRecord
+class Issue extends TrackStarActiveRecord
 {
     
     // list of possible issue types
@@ -71,6 +71,24 @@ class Issue extends CActiveRecord
             );
         }
         
+        /*
+         * @returnstring the status text display for the current issue
+         */
+        public function getStatusText()
+        {
+            $statusOptions = $this->statusOptions;
+            return isset($statusOptions[$this->status_id]) ?
+            $statusOptions[$this->status_id] : "unknown status ({$this->status_id})";
+            
+        }
+        
+        public function getTypeText()
+        {
+            $typeOptions = $this->typeOptions;
+            return isset($typeOptions[$this->type_id]) ?
+            $typeOptions[$this->type_id] : "unknown type ({$this->type_id})";
+        }
+        
         /**
          * @return array of allowed values for StatusOptions
          */
@@ -101,9 +119,9 @@ class Issue extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('project_id, type_id, status_id, owner_id, requester_id, create_user_id, update_user_id', 'numerical', 'integerOnly'=>true),
+			array('project_id, type_id, status_id, owner_id, requester_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
-			array('description, create_time, update_time', 'safe'),
+			array('description', 'safe'),
                         array('type_id', 'in', 'range'=>self::getAllowedTypeRange()),
                         array('status_id', 'in', 'range'=>self::getAllowedStatusRange()),
 			// The following rule is used by search().
@@ -168,7 +186,6 @@ class Issue extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('project_id',$this->project_id);
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('status_id',$this->status_id);
 		$criteria->compare('owner_id',$this->owner_id);
@@ -177,6 +194,8 @@ class Issue extends CActiveRecord
 		$criteria->compare('create_user_id',$this->create_user_id);
 		$criteria->compare('update_time',$this->update_time,true);
 		$criteria->compare('update_user_id',$this->update_user_id);
+                $criteria->condition = 'project_id=:projectID';
+                $criteria->params=array(':projectID'=>$this->project_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
