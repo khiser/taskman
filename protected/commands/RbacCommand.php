@@ -12,7 +12,7 @@ class RbacCommand extends CConsoleCommand
 		$description .= '    '."This command generates an initial RBAC authorization hierarchy.\n";
 		return parent::getHelp() . $description;
 	}
- 
+
 	
 	/**
 	 * The default action - create the RBAC structure.
@@ -37,7 +37,7 @@ class RbacCommand extends CConsoleCommand
 		     //first we need to remove all operations, 
 			 //roles, child relationship and assignments
 			 $this->_authManager->clearAll();
- 
+
 			 //create the lowest level operations for users
 			 $this->_authManager->createOperation(
 				"createUser",
@@ -51,7 +51,7 @@ class RbacCommand extends CConsoleCommand
 			 $this->_authManager->createOperation(
 				"deleteUser",
 				"remove a user from a project"); 
- 
+
 			 //create the lowest level operations for projects
 			 $this->_authManager->createOperation(
 				"createProject",
@@ -65,7 +65,7 @@ class RbacCommand extends CConsoleCommand
 			 $this->_authManager->createOperation(
 				"deleteProject",
 				"delete a project"); 
- 
+
 			 //create the lowest level operations for issues
 			 $this->_authManager->createOperation(
 				"createIssue",
@@ -79,14 +79,14 @@ class RbacCommand extends CConsoleCommand
 			 $this->_authManager->createOperation(
 				"deleteIssue",
 				"delete an issue from a project");     
- 
+
 			 //create the reader role and add the appropriate 
 			 //permissions as children to this role
 			 $role=$this->_authManager->createRole("reader"); 
 			 $role->addChild("readUser");
 			 $role->addChild("readProject"); 
 			 $role->addChild("readIssue"); 
- 
+
 			 //create the member role, and add the appropriate 
 			 //permissions, as well as the reader role itself, as children
 			 $role=$this->_authManager->createRole("member"); 
@@ -94,7 +94,7 @@ class RbacCommand extends CConsoleCommand
 			 $role->addChild("createIssue"); 
 			 $role->addChild("updateIssue"); 
 			 $role->addChild("deleteIssue"); 
- 
+
 			 //create the owner role, and add the appropriate permissions, 
 			 //as well as both the reader and member roles as children
 			 $role=$this->_authManager->createRole("owner"); 
@@ -113,7 +113,7 @@ class RbacCommand extends CConsoleCommand
  		else
 			echo "Operation cancelled.\n";
     }
- 
+
 	public function actionDelete()
 	{
 		$this->ensureAuthManagerDefined();

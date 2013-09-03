@@ -6,30 +6,14 @@ class IssueController extends Controller
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
-    
 	public $layout='//layouts/column2';
-        /* @var private property containing the associated Project modelinstance
-         */
-        private $_project = null;
-        
-        /* Protected method to load the associated Project model class
-         * @param integer projectId the primary identifier of the associated prohect
-         * @return object the Project data model based on the primary key
-         */
-        protected function loadProject($projectId) {
-            //if the project property is null, create it based on input id
-            if($this->_project==null)
-            {
-                $this->_project=Project::model()->findByPk($projectId);
-                if ($this->_project==null){
-                    
-                    throw new CHttpException(404,'The requested project does not exist.');
-            }
-        }
-        
-        return $this->_project;
-}
-        
+	
+	/**
+	 * @var private property containing the associated Project model instance.
+	 */
+	private $_project = null; 
+	
+
 	/**
 	 * @return array action filters
 	 */
@@ -37,47 +21,21 @@ class IssueController extends Controller
 	{
 		return array(
 			'accessControl', // perform access control for CRUD operations
-			'postOnly + delete', // we only allow deletion via POST request
-                        'projectContext + create index admin' // check to ensure valid project context
-                        
+			'projectContext + create index admin', //check to ensure valid project context
 		);
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
- */
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
 	public function actionView($id)
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
+		$issue=$this->loadModel($id);
+                $comment=$this->createComment($issue);
+                $this->render('view', array('model'=>$issue,
+                'comment'=>$comment,
+                ));
 	}
 
 	/**
@@ -87,7 +45,7 @@ class IssueController extends Controller
 	public function actionCreate()
 	{
 		$model=new Issue;
-                $model->project_id = $this->_project->id;
+		$model->project_id = $this->_project->id;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -135,11 +93,17 @@ class IssueController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		if(Yii::app()->request->isPostRequest)
+		{
+			// we only allow deletion via POST request
+			$this->loadModel($id)->delete();
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			if(!isset($_GET['ajax']))
+				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}
+		else
+			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
 	/**
@@ -148,28 +112,26 @@ class IssueController extends Controller
 	public function actionIndex()
 	{
 		$dataProvider=new CActiveDataProvider('Issue', array(
-                    'criteria'=>array(
-                        'condition'=>'project_id=:projectId',
-                        'params'=>array(
-                            ':projectId'=>$this->_project->id),
-                        ),
-                ));
+			'criteria'=>array(
+				'condition'=>'project_id=:projectId',
+				'params'=>array(':projectId'=>$this->_project->id),
+			),
+		));
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
 	}
-
+	
 	/**
 	 * Manages all models.
 	 */
 	public function actionAdmin()
 	{
 		$model=new Issue('search');
-		// $model->unsetAttributes();  // clear any default values
+		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Issue']))
 			$model->attributes=$_GET['Issue'];
-                
-                $model->project_id = $this->_project->id;
+		$model->project_id = $this->_project->id;
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -179,9 +141,7 @@ class IssueController extends Controller
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return Issue the loaded model
-	 * @throws CHttpException
+	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel($id)
 	{
@@ -193,7 +153,7 @@ class IssueController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Issue $model the model to be validated
+	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
@@ -203,16 +163,62 @@ class IssueController extends Controller
 			Yii::app()->end();
 		}
 	}
+	
+	/**
+	 * Protected method to load the associated Project model class
+	 * @project_id the primary identifier of the associated Project
+	 * @return object the Project data model based on the primary key 
+	 */
+	protected function loadProject($projectId)	 
+	{
+		//if the project property is null, create it based on input id
+		if($this->_project===null)
+		{
+			$this->_project=Project::model()->findbyPk($projectId);
+			if($this->_project===null)
+	        {
+				throw new CHttpException(404,'The requested project does not exist.'); 
+			}
+		}
+
+		return $this->_project; 
+	} 
+	
+	/**
+	 * In-class defined filter method, configured for use in the above filters() method
+	 * It is called before the actionCreate() action method is run in order to ensure a proper project context
+	 */
+	public function filterProjectContext($filterChain)
+	{   
+		//set the project identifier based on either the GET input 
+	    //request variables   
+		if(isset($_GET['pid']))
+			$this->loadProject($_GET['pid']);   
+		else
+			throw new CHttpException(403,'Must specify a project before performing this action.');
+			
+		//complete the running of other filters and execute the requested action
+		$filterChain->run(); 
+	} 
         
-        public function filterProjectContext($filterChain)
+        /*
+         * Creates a new comment on an issue
+         */
+        
+        protected function createComment($issue)
         {
-            //set the project identifier based on GET input request variables
-            if (isset($_GET['pid'])) {
-                $this->loadProject($_GET['pid']);
-            } else {
-                throw new CHttpException(403,'Must specify a project before performing this action.');
+            if(isset($_POST['Comment']))
+            {
+                $comment->attributes=$_POST['Comment'];
+                if($issue->addComment($comment))
+                {
+                    Yii::app()->user->setFlash('commentSubmitted', "Your comment has been added.");
+                    $this->refresh();
+                }
             }
-            
-            $filterChain->run();
+            return $comment;
         }
+       
+	
+	
 }

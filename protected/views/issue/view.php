@@ -36,3 +36,13 @@ $this->menu=array(
                     'value' => isset($model->owner)?CHtml::encode($model->owner->username): "unknown"),
 	),
 )); ?>
+
+<div id="comments">
+    <?php if ($model->commentCount>=1): ?>
+    <h3>
+        <?php echo $model->commentCount>1 ? $model->commentCount . ' comments' : 'One comment'; ?>
+    </h3>
+    
+    <?php $this->renderPartial('_comments', array('comments'=>$model->comments,)); ?>
+    <?php     endif; ?>
+</div>
